@@ -16,7 +16,7 @@ import ViewIcon from "@material-ui/icons/ViewList";
 import SettingsIcon from "@material-ui/icons/Settings";
 import Collapse from "@material-ui/core/Collapse";
 import { getServiceDisplayName } from "../utils/ita";
-import HubsCloudLogo from "../assets/images/hubs_cloud_dark.png";
+import HubsCloudLogo from "../assets/images/swivelmeta-white.png";
 
 const mapStateToProps = state => ({
   resources: getResources(state)
@@ -122,7 +122,7 @@ class Menu extends Component {
     return (
       <List className={this.props.classes.root}>
         <ListItem className={this.props.classes.logo}>
-          <img className={this.props.classes.logo} src={HubsCloudLogo} />
+          <img className="{{this.props.classes.logo}} custom-admin-logo" src={HubsCloudLogo} />
         </ListItem>
         <ListItem
           className={this.props.classes.item}

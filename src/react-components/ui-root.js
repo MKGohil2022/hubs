@@ -94,6 +94,7 @@ import { TipContainer, FullscreenTip } from "./room/TipContainer";
 import { SpectatingLabel } from "./room/SpectatingLabel";
 import { SignInMessages } from "./auth/SignInModal";
 import { MediaDevicesEvents } from "../utils/media-devices-utils";
+import { SwivelCoreApi } from "../services/swivel-core-api";
 
 const avatarEditorDebug = qsTruthy("avatarEditorDebug");
 
@@ -203,7 +204,7 @@ class UIRoot extends Component {
 
   constructor(props) {
     super(props);
-
+    this.swivelCoreApi = new SwivelCoreApi();
     props.mediaSearchStore.setHistory(props.history);
 
     // An exit handler that discards event arguments and can be cleaned up.
@@ -813,6 +814,20 @@ class UIRoot extends Component {
     this.props.hubChannel.sendEnteringCancelledEvent();
     this.setState({ entering: false });
   };
+  // send discord event
+  async sendDiscordEvent(flag = "joined") {
+    return new Promise(async resolve => {
+      const avatarName = getPresenceProfileForSession(this.props.presences, this.props.sessionId).displayName;
+      const roomName = this.props.hub.name;
+      let discordMessage = `${avatarName}`;
+      if (this.props?.store?.state?.credentials?.email) {
+        discordMessage = `${discordMessage} (${this.props.store.state.credentials.email})`;
+      }
+      discordMessage = `${discordMessage} ${flag} the room #${roomName} ${window.location.href}`;
+      await this.swivelCoreApi.discordEvent(discordMessage);
+      resolve(true);
+    });
+  }
 
   renderEntryStartPanel = () => {
     const { hasAcceptedProfile, hasChangedName } = this.props.store.state.activity;
@@ -826,11 +841,11 @@ class UIRoot extends Component {
           logoSrc={configs.image("logo")}
           roomName={this.props.hub.name}
           showJoinRoom={!this.state.waitingOnAudio && !this.props.entryDisallowed}
-          onJoinRoom={() => {
+          onJoinRoom={async () => {
             if (promptForNameAndAvatarBeforeEntry || !this.props.forcedVREntryType) {
+              await this.sendDiscordEvent();
               this.setState({ entering: true });
               this.props.hubChannel.sendEnteringEvent();
-
               if (promptForNameAndAvatarBeforeEntry) {
                 this.pushHistoryState("entry_step", "profile");
               } else {
@@ -898,7 +913,6 @@ class UIRoot extends Component {
       />
     );
   };
-
   renderAudioSetupPanel = () => {
     this.mediaDevicesManager.micShouldBeEnabled = !this.props.store.state.preferences["muteMicOnEntry"];
     // TODO: Show HMD mic not chosen warning
