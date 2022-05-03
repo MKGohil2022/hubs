@@ -80,6 +80,7 @@
         personal-space-bubble="debug: false;"
         rotate-selected-object
         light="defaultLightsEnabled: false"
+        cursor="rayOrigin: mouse"
     >
         <a-assets>
             <img id="presence-count" crossorigin="anonymous" src="./assets/hud/presence-count.png">
@@ -1355,6 +1356,29 @@
         </a-entity>
         <a-entity id="scene-preview-node">
         </a-entity>
+
+        <!-- custom teleport start -->
+        <a-entity id="rds-box" geometry="primitive:sphere"
+                    position = "4.666595758189787 1.5 -8.087376421589314"
+                    radius = "1"
+                    scale="0.2 0.2 0.2"
+                    material = "color: #FF7700"
+                    custom-teleport
+        >
+        </a-entity>
+
+        <a-entity
+        position = "4.666595758189787 1.8 -8.087376421589314"
+        scale = "2 2 2"
+        rotation="0 180 0"
+        text = "
+        value:Go to first floor;
+        color:#FF7700;
+        align:center;
+        "
+        ></a-entity>
+        <!-- custom teleport end -->
+
     </a-scene>
 
     <div id="ui-root"></div>

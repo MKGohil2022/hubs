@@ -165,7 +165,7 @@ import MessageDispatch from "./message-dispatch";
 import SceneEntryManager from "./scene-entry-manager";
 import Subscriptions from "./subscriptions";
 import { createInWorldLogMessage } from "./react-components/chat-message";
-
+import "./components/custom-teleport-event";
 import "./systems/nav";
 import "./systems/frame-scheduler";
 import "./systems/personal-space-bubble";
